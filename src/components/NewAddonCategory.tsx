@@ -34,7 +34,7 @@ const NewAddonCategory = ({open , setOpen } : Props) => {
         <Dialog open={open} onClose={() => {
             setOpen(false);
             setNewAddonCategory(defaultAddonCategory);
-            }} >
+            }} > 
             <DialogTitle>Addon Category</DialogTitle>
             <DialogContent sx={{display : "flex",flexDirection : "column", gap : "20px" , width : "300px"}}>
                 <TextField placeholder="name" onChange={(event) => setNewAddonCategory({...newAddonCategory, name : event.target.value})} />
