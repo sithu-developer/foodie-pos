@@ -1,7 +1,8 @@
 import { AddonCategorySliceInitialState, DeleteAddonCategoryOptions, NewAddonCategoryOptions, UpdateAddonCategoryOptions } from "@/types/addonCategory";
 import { config } from "@/utils/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addMenuAddonCategories, replaceMenuAddonCategories } from "./menuAddonCategorySlice";
+import { addMenuAddonCategories, removeMenuAddonCategoriesFromAddonCategory, replaceMenuAddonCategories } from "./menuAddonCategorySlice";
+import { removeAddonFromAddonCategory } from "./addonSlice";
 
 const initialState : AddonCategorySliceInitialState = {
     items : [],
@@ -35,7 +36,9 @@ export const deleteAddonCategory = createAsyncThunk("addonCategorySlice/deleteAd
             method : "DELETE"
         });
         const {addonCategory} = await response.json();
-        if(addonCategory.id === id) thunkApi.dispatch(removeAddonCategory(addonCategory))
+        thunkApi.dispatch(removeAddonCategory(addonCategory));
+        thunkApi.dispatch(removeMenuAddonCategoriesFromAddonCategory(addonCategory));
+        thunkApi.dispatch(removeAddonFromAddonCategory(addonCategory));
         onSuccess && onSuccess();
     } catch (err) {
         onError && onError();

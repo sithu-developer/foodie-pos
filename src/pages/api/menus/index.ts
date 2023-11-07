@@ -13,8 +13,8 @@ export default async function handler(
     if(!session) return res.status(401).send("unauthorized");
     const method = req.method;
     if(method === "POST") {
-        const {name , price , selectedMenuCategoryIds} = req.body as CreateNewMenuOption;
-        const isValid = name && price && selectedMenuCategoryIds.length > 0 ;
+        const {name , price = 0 , selectedMenuCategoryIds} = req.body as CreateNewMenuOption;
+        const isValid = name && price !== undefined && selectedMenuCategoryIds.length > 0 ;
         if(!isValid) return res.status(400).send("Bad request");
         const newMenu = await prisma.menu.create({data : { name , price}});
         const newMenuId = newMenu.id;
@@ -36,10 +36,12 @@ export default async function handler(
       return res.status(200).json({updatedMenu, updatedMenuCategoryMenus});
     } else if (method === "DELETE") {
       const menuId = Number(req.query.id);
-      const menu = await prisma.menu.findFirst({where : {id : menuId}});
-      if(!menu) return res.status(400).send("Bad request");
-      const deletedMenu = await prisma.menu.update({where : { id : menuId}, data : {isArchived : true}});
-      return res.status(200).send({menuId : deletedMenu.id});
+      const exist = await prisma.menu.findFirst({where : {id : menuId}});
+      if(!exist) return res.status(400).send("Bad request");
+      await prisma.menuCategoryMenu.updateMany({where : { menuId }, data : { isArchived : true}});
+      await prisma.menuAddonCategory.updateMany({ where : { menuId} , data : {isArchived : true}});
+      const menu = await prisma.menu.update({where : { id : menuId}, data : {isArchived : true}});
+      return res.status(200).send({menu});
     }
   res.status(405).send("Invalid method");
 }

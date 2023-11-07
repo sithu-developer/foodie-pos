@@ -1,8 +1,9 @@
 import { CreateNewMenuOption, DeleteMenuOption, GetMenusOption, MenuSliceInitialState, UpdateMenuOption } from "@/types/menu";
 import { config } from "@/utils/config";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addMenuCategoryMenu, replaceMenuCategoryMenu } from "./menuCategoryMenuSlice";
-import { MenuCategoryMenu } from "@prisma/client";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { addMenuCategoryMenu, removeMenuCategoryMenuFromMenu, replaceMenuCategoryMenu } from "./menuCategoryMenuSlice";
+import { Menu, MenuCategoryMenu } from "@prisma/client";
+import { removeMenuAddonCategoriesFromMenu } from "./menuAddonCategorySlice";
 
 const initialState : MenuSliceInitialState = {
     items : [],
@@ -67,8 +68,10 @@ export const deleteMenu = createAsyncThunk("menuSlice/deleteMenu" , async(option
         const response = await fetch(`${config.apiBaseUrl}/menus?id=${id}` , {
             method : "DELETE"
         });
-        const {menuId} = await response.json();
-        if(menuId === id) thunkApi.dispatch(removeMenu({id}));
+        const {menu} = await response.json();
+        thunkApi.dispatch(removeMenu(menu));
+        thunkApi.dispatch(removeMenuCategoryMenuFromMenu(menu));
+        thunkApi.dispatch(removeMenuAddonCategoriesFromMenu(menu));
         onSuccess && onSuccess();
     } catch (err) {
         onError && onError();
@@ -90,7 +93,7 @@ const menuSlice = createSlice({
             // const clearedMenus = state.items.filter(menu => menu.id !== action.payload.id);
             // state.items = [...clearedMenus, action.payload]
         },
-        removeMenu : (state , action ) => {
+        removeMenu : (state , action : PayloadAction<Menu> ) => {
             state.items = state.items.filter(menu => menu.id !== action.payload.id);
         }
     }

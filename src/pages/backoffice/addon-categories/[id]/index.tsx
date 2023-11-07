@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteAddonCategory, updateAddonCategory } from "@/store/slices/addonCategorySlice";
 import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
 import { UpdateAddonCategoryOptions } from "@/types/addonCategory";
-import { Box, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Box, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import { Menu } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -65,7 +65,8 @@ const AddonCategoryDetail = () => {
 
     return (
         <Box sx={{ display : "flex " , flexDirection : "column" , gap : "20px"}}>
-            <Box sx={{display : "flex" , justifyContent : "flex-end "}}>
+            <Box sx={{display : "flex" , justifyContent : "space-between"}}>
+            <Typography variant="h5">{currentAddonCategory.name}</Typography>
                 <Button variant="outlined" color="error" onClick={() => setOpen(true)}>Delete</Button>
             </Box>
             <TextField defaultValue={currentAddonCategory.name} onChange={(event) => setUpdatedAddonCategory({...updatedAddonCategory , name : event.target.value})} />

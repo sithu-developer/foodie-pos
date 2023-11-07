@@ -26,6 +26,8 @@ export default async function handler(
       const id = Number(req.query.id);
       const isValid = await prisma.addonCategory.findFirst({where : { id }});
       if(!isValid) return res.status(400).send("Bad request");
+      await prisma.menuAddonCategory.updateMany({ where : { addonCategoryId : id} , data : {isArchived : true}});
+      await prisma.addon.updateMany({where : {addonCategoryId : id } , data : { isArchived : true }})
       const addonCategory = await prisma.addonCategory.update({ where : { id } , data : { isArchived : true }});
       return res.status(200).json({addonCategory});
     } else if(method === "PUT") {

@@ -1,7 +1,8 @@
-import { CreateMenuCategoryOption, MenuCategorySliceInitialState } from "@/types/menuCategory";
+import { CreateMenuCategoryOption, DeleteMenuCategoryOptions, MenuCategorySliceInitialState, UpdateMenuCategoryOptions } from "@/types/menuCategory";
 import { config } from "@/utils/config";
 import { MenuCategory } from "@prisma/client";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { removeMenuCategoryMenuFromMenuCategory } from "./menuCategoryMenuSlice";
 
 const initialState : MenuCategorySliceInitialState = {
     items : [],
@@ -19,8 +20,41 @@ export const createMenuCategory = createAsyncThunk("menuCategorySlice/createMenu
             },
             body : JSON.stringify({ name , locationId })
         });
-        const menuCategory = await response.json();
+        const {menuCategory} = await response.json();
         thunkApi.dispatch(addMenuCategory(menuCategory));
+        onSuccess && onSuccess();
+    } catch (err) {
+        onError && onError();
+    }
+})
+
+export const updateMenuCategory = createAsyncThunk("menuCategorySlice/updateMenuCategory", async(options : UpdateMenuCategoryOptions , thunkApi) => {
+    const {onSuccess, onError, id , name, companyId} = options;
+    try {
+        const response = await fetch(`${config.apiBaseUrl}/menu-categories`, {
+            method : "PUT",
+            headers : {
+                "content-type" : "application/json"
+            },
+            body : JSON.stringify({ id , name , companyId })
+        });
+        const {menuCategory} = await response.json();
+        thunkApi.dispatch(replaceMenuCategory(menuCategory))
+        onSuccess && onSuccess();
+    } catch (err) {
+        onError && onError();
+    }
+})
+
+export const deleteMenuCategory = createAsyncThunk("menuCategorySlice/deleteMenuCategory", async(options : DeleteMenuCategoryOptions , thunkApi) => {
+    const {onSuccess, onError, id } = options;
+    try {
+        const response = await fetch(`${config.apiBaseUrl}/menu-categories?id=${id}`, {
+            method : "DELETE",
+        });
+        const {menuCategory} = await response.json();
+        thunkApi.dispatch(removeMenuCategory(menuCategory));
+        thunkApi.dispatch(removeMenuCategoryMenuFromMenuCategory(menuCategory));
         onSuccess && onSuccess();
     } catch (err) {
         onError && onError();
@@ -36,10 +70,16 @@ const menuCategorySlice = createSlice({
         },
         addMenuCategory : (state , action ) => {
             state.items = [...state.items , action.payload];
+        },
+        replaceMenuCategory : (state , action : PayloadAction<MenuCategory>) => {
+            state.items = state.items.map(item => item.id === action.payload.id ? action.payload : item)
+        },
+        removeMenuCategory : (state , action : PayloadAction<MenuCategory> ) => {
+            state.items = state.items.filter(item => item.id !== action.payload.id );
         }
     }
 })
 
-export const {setMenuCategories, addMenuCategory} = menuCategorySlice.actions;
+export const {setMenuCategories, addMenuCategory , replaceMenuCategory , removeMenuCategory} = menuCategorySlice.actions;
 
 export default menuCategorySlice.reducer;

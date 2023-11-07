@@ -12,3 +12,13 @@ export interface CreateMenuCategoryOption extends BaseOptions {
     name : string;
     locationId : number;
 }
+
+export interface UpdateMenuCategoryOptions extends BaseOptions {
+    id : number ;
+    name : string;
+    companyId : number;
+}
+
+export interface DeleteMenuCategoryOptions extends BaseOptions {
+    id : number ;
+}

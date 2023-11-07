@@ -26,25 +26,25 @@ export default async function handler(
         await prisma.users.create({data : {email, name , companyId : company.id }});
         // 3. create new menu category
         const newMenuCategoryName = "Default Menu Category";
-        const menuCategory = await prisma.menuCategory.create({data : {name : newMenuCategoryName, companyId : company.id }});
+        const menuCategories = await prisma.menuCategory.create({data : {name : newMenuCategoryName, companyId : company.id }});
         // 4. create new menu
         const newMenuName = "Default Menu";
-        const menu = await prisma.menu.create({data : {name : newMenuName , price : 1000 }});
+        const menus = await prisma.menu.create({data : {name : newMenuName , price : 1000 }});
         // 5. create new row in MenuCategoryMenu
-        const menuCategoryMenu = await prisma.menuCategoryMenu.create({data : {menuCategoryId : menuCategory.id , menuId : menu.id }});
+        const menuCategoryMenus = await prisma.menuCategoryMenu.create({data : {menuCategoryId : menuCategories.id , menuId : menus.id }});
         // 6. create new addon Category
         const newAddonCategoryName = "Default addon Category";
-        const addonCategory = await prisma.addonCategory.create({data : {name : newAddonCategoryName }});
+        const addonCategories = await prisma.addonCategory.create({data : {name : newAddonCategoryName }});
         // 7. create new row in MenuAddonCategory
-        const menuAddonCategory = await prisma.menuAddonCategory.create({data : {menuId : menu.id , addonCategoryId : addonCategory.id}});
+        const menuAddonCategories = await prisma.menuAddonCategory.create({data : {menuId : menus.id , addonCategoryId : addonCategories.id}});
         // 8. create addon
         const newAddonNameOne = "Default addon 1";
         const newAddonNameTwo = "Default addon 2";
         const newAddonNameThree = "Default addon 3";
         const newAddonsData = [
-          {name : newAddonNameOne , addonCategoryId  : addonCategory.id},
-          {name : newAddonNameTwo , addonCategoryId  : addonCategory.id},
-          {name : newAddonNameThree , addonCategoryId  : addonCategory.id}
+          {name : newAddonNameOne , addonCategoryId  : addonCategories.id},
+          {name : newAddonNameTwo , addonCategoryId  : addonCategories.id},
+          {name : newAddonNameThree , addonCategoryId  : addonCategories.id}
         ];
         const addons = await prisma.$transaction(
           newAddonsData.map(addon => prisma.addon.create({data : addon}))
@@ -53,22 +53,24 @@ export default async function handler(
         // 9. create location
         const newLocationName = "Sanchaung";
         const location = await prisma.location.create({data : { name : newLocationName , companyId : company.id , address : newCompanyAddress}})
+        const locations = await prisma.location.findMany({where : { companyId : company.id, isArchived : false }});
+
         // 10. create new table 
         const newTableName = "Default table";
-        const table = await prisma.table.create({data : {name : newTableName, locationId : location.id }})
+        const tables = await prisma.table.create({data : {name : newTableName, locationId : location.id }})
         return res.send({
-          menuCategory,
-          menu,
-          menuCategoryMenu,  // check here
-          addonCategory,
+          menuCategories,
+          menus,
+          menuCategoryMenus,  // check here
+          addonCategories,
           addons,
-          menuAddonCategory,
-          location,
-          table
+          menuAddonCategories,
+          locations, // this plural variable is for saving locationId in localStorage for new user
+          tables
         })
       } else {
         const companyId = dbUser.companyId;
-        const locations = await prisma.location.findMany({where : { companyId }});
+        const locations = await prisma.location.findMany({where : { companyId , isArchived : false }});
         const locationIds = locations.map(element => element.id);
         const menuCategories = await prisma.menuCategory.findMany({where : { companyId  , isArchived : false }});
         const menuCategoryIds = menuCategories.map(element => element.id);
@@ -80,7 +82,7 @@ export default async function handler(
         const addonCategoryIds = menuAddonCategories.map(element => element.addonCategoryId);
         const addonCategories = await prisma.addonCategory.findMany({where : {id : { in : addonCategoryIds } , isArchived : false }});
         const addons = await prisma.addon.findMany({where : {addonCategoryId : { in : addonCategoryIds} , isArchived : false }});
-        const tables = await prisma.table.findMany({where : { locationId : { in : locationIds} }});
+        const tables = await prisma.table.findMany({where : { locationId : { in : locationIds} , isArchived : false }});
         return res.status(200).json({
           menuCategories,
           menus,

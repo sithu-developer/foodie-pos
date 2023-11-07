@@ -8,8 +8,10 @@ interface Props {
     setOpen : (value : boolean) => void
 }
 
+const defaultLocation = {name : "", address : ""}
+
 const NewLocation = ({open , setOpen } : Props) => {
-    const [newLocation , setNewLocation] = useState({name : "", address : ""});
+    const [newLocation , setNewLocation] = useState(defaultLocation);
     const dispatch = useAppDispatch();
 
     const onSuccess = () => {
@@ -19,7 +21,7 @@ const NewLocation = ({open , setOpen } : Props) => {
     return (
         <Dialog open={open} onClose={() => {
             setOpen(false);
-            setNewLocation({name : "", address : ""});
+            setNewLocation(defaultLocation);
         }} >
             <DialogTitle>Location</DialogTitle>
             <DialogContent sx={{display : "flex",flexDirection : "column", gap : "20px", width :"400px"}}>
@@ -32,11 +34,11 @@ const NewLocation = ({open , setOpen } : Props) => {
                 <Box sx={{display :"flex", justifyContent : "flex-end", gap : "20px"}}>
                     <Button variant="contained" onClick={() => {
                         setOpen(false);
-                        setNewLocation({name : "", address : ""});
+                        setNewLocation(defaultLocation);
                     } } >Cancel</Button>
                     <Button variant="contained" disabled={newLocation.name && newLocation.address ? false : true} onClick={() => {
                         dispatch(createNewLocation({...newLocation , onSuccess}));
-                    }}  >Comfirm</Button>
+                    }} >Comfirm</Button>
                 </Box>
             </DialogContent>
         </Dialog>

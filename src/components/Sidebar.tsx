@@ -14,7 +14,7 @@ import Link from "next/link";
 const Sidebar = () => {
 
     return (
-        <Box sx={{width : "200px",borderTopRightRadius : "10px", bgcolor : "secondary.main",height : "90vh" , display : "flex", flexDirection : "column"}}>
+        <Box sx={{width : "200px",borderTopRightRadius : "10px", bgcolor : "secondary.main",height : "100vh" , display : "flex", flexDirection : "column"}}>
             {items.slice(0,7).map(item => {
                 return (
                   <Link href={item.href} style={{textDecoration : "none", color : "white"}} key={item.id}>

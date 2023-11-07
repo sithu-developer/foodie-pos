@@ -1,8 +1,9 @@
 import DeleteComfirmation from "@/components/DeleteComfirmation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteMenu, updateMenu } from "@/store/slices/menuSlice";
+import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
 import { UpdateMenuOption } from "@/types/menu";
-import { Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -18,14 +19,14 @@ const UpdateMenu = () => {
     const allMenuCategoryMenus = useAppSelector(state => state.menuCategoryMenu.items);
     const menuCategoryMenus = allMenuCategoryMenus.filter(item => item.menuId === menuId);
     const selectedMenuCategoryIds = menuCategoryMenus.map(item => item.menuCategoryId);
-
+    console.log(menuCategoryMenus , "and " , selectedMenuCategoryIds )
     
     const [updatedMenu , setUpdatedMenu] = useState<UpdateMenuOption>();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         if(menu) {
-            setUpdatedMenu({...menu,selectedMenuCategoryIds }) // ask why menu copy
+            setUpdatedMenu({...menu,selectedMenuCategoryIds }) 
         }
     }, [menu])
 
@@ -36,21 +37,33 @@ const UpdateMenu = () => {
         setUpdatedMenu({...updatedMenu, id : menuId, selectedMenuCategoryIds });
     }
 
-    const onSuccess = () => {
-        router.push("/backoffice/menus");
-    }
-
     const handleUpdateMenu = () => {
-        dispatch(updateMenu({...updatedMenu , id : menuId, onSuccess}));
+        const isValid = updatedMenu.name && updatedMenu.price && updatedMenu.selectedMenuCategoryIds.length > 0 ;
+        if(!isValid) dispatch(setOpenSnackbar({message : "Error , please complete the above first ! " , severity : "error"}))
+        dispatch(updateMenu({
+            ...updatedMenu,
+            id : menuId,
+            onSuccess : () => {
+                router.push("/backoffice/menus");
+                dispatch(setOpenSnackbar({ message : "menu is updated successfully "}))
+            } 
+        }));
     }
 
     const handleDeleteMenu = () => {
-       dispatch(deleteMenu({id : menuId , onSuccess}));
+        dispatch(deleteMenu({
+            id : menuId ,
+             onSuccess : () => {
+                router.push("/backoffice/menus");
+                dispatch(setOpenSnackbar({ message : "menu is deleted successfully "}))
+            }
+        }));
     }
    
     return (
         <Box sx={{display : "flex", flexDirection : "column", gap : "20px"}}>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}} >
+            <Box sx={{display : "flex", justifyContent : "space-between"}} >
+            <Typography variant="h5">{menu.name}</Typography>
                 <Button variant="outlined" color="error" onClick={() => setOpen(true)}>Delete</Button>
             </Box>
             <TextField defaultValue={menu.name} onChange={(event) => setUpdatedMenu({...updatedMenu , id : menuId , name : event.target.value })} />

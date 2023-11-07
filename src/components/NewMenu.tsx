@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { createNewMenu } from "@/store/slices/menuSlice"
+import { setOpenSnackbar } from "@/store/slices/snackbarSlice"
 import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControl, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
 import { MenuCategory } from "@prisma/client"
 import { useEffect, useState } from "react"
@@ -26,6 +27,7 @@ const NewMenu = ({open , setOpen } : Props) => {
         setOpen(false);
         setSelectedMenuCategoryIds([]);
         setNewMenu(defaultMenu);
+        dispatch(setOpenSnackbar({message : "New menu is created successfully"}))
     }
 
     const handleCreateMenu = () => {

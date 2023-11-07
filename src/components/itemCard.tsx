@@ -27,7 +27,7 @@ const ItemCard = ( {href, title , icon , subtitle} : Props) => {
         <Box> 
             <Paper elevation={3} sx={{width : "200px", height : "200px", display : "flex",flexDirection : "column", justifyContent : "center", alignItems : "center"}}>
                 <Box sx={{color : "primary.main"}}>{icon}</Box>
-                <Typography variant="h5" sx={{color : "primary.main"}}>{title}</Typography>
+                <Typography variant="h5" sx={{color : "primary.main"  }}>{title}</Typography>
                 {subtitle && <Typography variant="h6" sx={{color : "primary.main"}} >{subtitle}</Typography>}
             </Paper>
         </Box>
