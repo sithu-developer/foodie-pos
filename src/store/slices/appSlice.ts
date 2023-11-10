@@ -9,6 +9,7 @@ import { setAddon } from "./addonSlice";
 import { setTable } from "./tableSlice";
 import { setMenuCategoryMenu } from "./menuCategoryMenuSlice";
 import { setMenuAddonCategories } from "./menuAddonCategorySlice";
+import { setDisabledLocationMenuCategory } from "./disabledLocationMenuCategorySlice";
 
 const initialState : AppSlice = {
     init : false,
@@ -29,7 +30,8 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( _ 
             addons,
             menuAddonCategories,
             locations,
-            tables} = appData;
+            tables ,
+            disabledLocationMenuCategories} = appData;
         thunkApi.dispatch(setInit(true));
         thunkApi.dispatch(setMenuCategories(menuCategories));
         thunkApi.dispatch(setMenus(menus));
@@ -39,7 +41,7 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( _ 
         thunkApi.dispatch(setMenuAddonCategories(menuAddonCategories));
         thunkApi.dispatch(setLocation(locations));
         thunkApi.dispatch(setTable(tables));
-
+        thunkApi.dispatch(setDisabledLocationMenuCategory(disabledLocationMenuCategories))
         // onSuccess && onSuccess();
     } catch (err) {
         // onError && onError();

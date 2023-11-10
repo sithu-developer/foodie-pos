@@ -1,7 +1,9 @@
 import { useAppDispatch } from "@/store/hooks"
 import { createNewLocation } from "@/store/slices/locationSlice"
-import { Box, Button, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material"
+import { Box, Button, Chip, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material"
 import { useState } from "react"
+import { config } from "@/utils/config"
+import { setOpenSnackbar } from "@/store/slices/snackbarSlice"
 
 interface Props {
     open : boolean
@@ -16,6 +18,12 @@ const NewLocation = ({open , setOpen } : Props) => {
 
     const onSuccess = () => {
         setOpen(false);
+        dispatch(setOpenSnackbar({ message : "New location is created successfully"}))
+    }
+
+
+    const handleCreateLocation = async() => {
+        dispatch(createNewLocation({...newLocation , onSuccess}));
     }
 
     return (
@@ -36,9 +44,8 @@ const NewLocation = ({open , setOpen } : Props) => {
                         setOpen(false);
                         setNewLocation(defaultLocation);
                     } } >Cancel</Button>
-                    <Button variant="contained" disabled={newLocation.name && newLocation.address ? false : true} onClick={() => {
-                        dispatch(createNewLocation({...newLocation , onSuccess}));
-                    }} >Comfirm</Button>
+                    <Button variant="contained" disabled={newLocation.name && newLocation.address ? false : true} onClick={handleCreateLocation} 
+                    >Comfirm</Button>
                 </Box>
             </DialogContent>
         </Dialog>

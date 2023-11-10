@@ -1,5 +1,5 @@
 import NewAddonCategory from "@/components/NewAddonCategory";
-import ItemCard from "@/components/itemCard";
+import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";

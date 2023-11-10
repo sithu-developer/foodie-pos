@@ -15,7 +15,8 @@ export interface GetMenusOption extends BaseOptions {
 export interface CreateNewMenuOption extends BaseOptions {
     name : string;
     price : number
-    selectedMenuCategoryIds : number[]
+    selectedMenuCategoryIds : number[];
+    assetUrl ?: string;
 }
 
 export interface UpdateMenuOption extends BaseOptions {

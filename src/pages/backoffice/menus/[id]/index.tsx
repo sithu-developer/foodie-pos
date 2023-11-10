@@ -19,7 +19,6 @@ const UpdateMenu = () => {
     const allMenuCategoryMenus = useAppSelector(state => state.menuCategoryMenu.items);
     const menuCategoryMenus = allMenuCategoryMenus.filter(item => item.menuId === menuId);
     const selectedMenuCategoryIds = menuCategoryMenus.map(item => item.menuCategoryId);
-    console.log(menuCategoryMenus , "and " , selectedMenuCategoryIds )
     
     const [updatedMenu , setUpdatedMenu] = useState<UpdateMenuOption>();
     const dispatch = useAppDispatch();

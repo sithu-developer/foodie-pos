@@ -9,6 +9,7 @@ import tableReducer from "./slices/tableSlice"
 import menuCategoryMenuReducer from "./slices/menuCategoryMenuSlice"
 import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice"
 import snackbarReducer from "./slices/snackbarSlice"
+import disabledLocationMenuCategoryReducer from "./slices/disabledLocationMenuCategorySlice"
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +22,8 @@ export const store = configureStore({
     addonCategory : addonCategoryReducer,
     addon : addonReducer,
     table : tableReducer,
-    snackbar : snackbarReducer
+    snackbar : snackbarReducer,
+    disabledLocationMenuCategory : disabledLocationMenuCategoryReducer
   },
 })
 

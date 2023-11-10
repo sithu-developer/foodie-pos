@@ -23,12 +23,20 @@ export default async function handler(
     const menuCategory = await prisma.menuCategory.create({data : { name , companyId : location.companyId}})
     return res.status(200).json({menuCategory});
     } else if(method === "PUT") {
-      const { id , name , companyId } = req.body as UpdateMenuCategoryOptions;
-      const isValid = id && name && companyId;
+      const { id , name ,isAvailable ,locationId } = req.body as UpdateMenuCategoryOptions;
+      const isValid = id && name && locationId;
       if(!isValid) return res.status(400).send("Bad request");
       const exist = await prisma.menuCategory.findFirst({ where : { id }});
       if(!exist) return res.status(400).send("Bad request");
-      const menuCategory = await prisma.menuCategory.update({ where : { id } , data : { name , companyId }});
+      const menuCategory = await prisma.menuCategory.update({ where : { id } , data : { name }});
+      if(isAvailable === false) {
+        const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
+        (existDisable) ? await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : false}})
+        : await prisma.disabledLocationMenuCategory.create({ data  : {locationId , menuCategoryId : id }})
+      } else {
+        const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
+        if(existDisable) await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : true}})
+      }
       return res.status(200).json({menuCategory});
     } else if (method === "DELETE") {
       const id = Number(req.query.id);

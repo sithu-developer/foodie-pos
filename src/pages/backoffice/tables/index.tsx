@@ -1,5 +1,5 @@
 import NewTable from "@/components/NewTable";
-import ItemCard from "@/components/itemCard";
+import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
