@@ -7,14 +7,22 @@ interface Props {
     icon : ReactNode;
     href?: string;
     subtitle? : string;
+    isAvailable?: boolean;
 }
 
-const ItemCard = ( {href, title , icon , subtitle} : Props) => {
+const ItemCard = ( {href, title , icon , subtitle , isAvailable} : Props) => {
     if(href) {
         return (
             <Link href={href} style={{textDecoration : "none"}}>
             <Box>
-                <Paper elevation={3} sx={{width : "200px", height : "200px", display : "flex",flexDirection : "column", justifyContent : "center", alignItems : "center"}}>
+                <Paper elevation={3} sx={{
+                        opacity: isAvailable === false ? 0.6 : 1 ,
+                        width : "200px",
+                        height : "200px",
+                        display : "flex",
+                        flexDirection : "column",
+                        justifyContent : "center",
+                        alignItems : "center"}}>
                     <Box sx={{color : "primary.main"}}>{icon}</Box>
                     <Typography variant="h5" sx={{color : "primary.main"}}>{title}</Typography>
                     {subtitle && <Typography variant="h6" sx={{color : "primary.main"}} >{subtitle}</Typography>}

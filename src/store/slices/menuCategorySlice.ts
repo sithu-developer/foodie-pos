@@ -3,6 +3,7 @@ import { config } from "@/utils/config";
 import { MenuCategory } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { removeMenuCategoryMenuFromMenuCategory } from "./menuCategoryMenuSlice";
+import { addDisabledLocationMenuCategory, removeDisabledLocationMenuCategory } from "./disabledLocationMenuCategorySlice";
 
 const initialState : MenuCategorySliceInitialState = {
     items : [],
@@ -38,8 +39,13 @@ export const updateMenuCategory = createAsyncThunk("menuCategorySlice/updateMenu
             },
             body : JSON.stringify({ id , name  , isAvailable, locationId })
         });
-        const {menuCategory} = await response.json();
-        thunkApi.dispatch(replaceMenuCategory(menuCategory))
+        const {menuCategory , disabledLocationMenuCategory } = await response.json();
+        thunkApi.dispatch(replaceMenuCategory(menuCategory));
+        if(disabledLocationMenuCategory && isAvailable === false) {
+            thunkApi.dispatch(addDisabledLocationMenuCategory(disabledLocationMenuCategory));
+        } else if(disabledLocationMenuCategory && isAvailable === true) {
+            thunkApi.dispatch(removeDisabledLocationMenuCategory(disabledLocationMenuCategory))
+        }
         onSuccess && onSuccess();
     } catch (err) {
         onError && onError();

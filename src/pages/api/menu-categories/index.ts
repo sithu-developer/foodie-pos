@@ -31,13 +31,30 @@ export default async function handler(
       const menuCategory = await prisma.menuCategory.update({ where : { id } , data : { name }});
       if(isAvailable === false) {
         const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
-        (existDisable) ? await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : false}})
-        : await prisma.disabledLocationMenuCategory.create({ data  : {locationId , menuCategoryId : id }})
-      } else {
+        if(existDisable) return res.status(200).json({menuCategory})
+        else {
+          const disabledLocationMenuCategory =  await prisma.disabledLocationMenuCategory.create({ data  : {locationId , menuCategoryId : id }})
+          return res.status(200).json({ menuCategory , disabledLocationMenuCategory});
+        }
+      } else if(isAvailable === true) {
         const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
-        if(existDisable) await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : true}})
-      }
-      return res.status(200).json({menuCategory});
+        if(existDisable) {
+          await prisma.disabledLocationMenuCategory.delete({where : { id : existDisable.id} });
+          return res.status(200).json({ menuCategory , disabledLocationMenuCategory : existDisable })
+        } 
+        return res.status(200).json({menuCategory});
+    }
+      
+      // if(isAvailable === false) {
+      //   const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
+      //   (existDisable) ? await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : false}})
+      //   : await prisma.disabledLocationMenuCategory.create({ data  : {locationId , menuCategoryId : id }})
+      // } else {
+      //   const existDisable = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
+      //   if(existDisable) await prisma.disabledLocationMenuCategory.updateMany({where : {menuCategoryId : id , locationId } , data : { isArchived : true}})
+      // }
+      // const disabledLocationMenuCategory = await prisma.disabledLocationMenuCategory.findFirst({where : { menuCategoryId : id , locationId }});
+      // return res.status(200).json({menuCategory , disabledLocationMenuCategory });
     } else if (method === "DELETE") {
       const id = Number(req.query.id);
       const exist = await prisma.menuCategory.findFirst({ where : { id }});

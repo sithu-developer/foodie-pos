@@ -14,7 +14,6 @@ export default async function handler(
     const method = req.method;
     if(method === "POST") {
         const {name , price = 0 , assetUrl , selectedMenuCategoryIds} = req.body as CreateNewMenuOption;
-        console.log("create",assetUrl)
         const isValid = name && price !== undefined && selectedMenuCategoryIds.length > 0 ;
         if(!isValid) return res.status(400).send("Bad request");
         const newMenu = await prisma.menu.create({data : { name , price , assetUrl }});

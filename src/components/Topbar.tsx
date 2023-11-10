@@ -14,7 +14,7 @@ const Topbar = () => {
                 <Typography variant="h4" color={"success.main"}>Foodie POS</Typography>
             </Box>
            {data ? (<Box>
-                <Button variant="contained" onClick={() => signOut({callbackUrl : "/"})}>Sign out</Button>
+                <Button variant="contained" onClick={() => signOut({callbackUrl : "/backoffice"})}>Sign out</Button>
             </Box>) : <span /> }
         </Box>
     )

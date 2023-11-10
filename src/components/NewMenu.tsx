@@ -34,7 +34,6 @@ const NewMenu = ({open , setOpen } : Props) => {
 
     const handleCreateMenu = async() => {
         const newMenuPayload = {...newMenu}
-        console.log("menuImage : ",menuImage)
         if(menuImage) {
             const formData = new FormData();  //****
             formData.append("files" , menuImage)
@@ -44,7 +43,6 @@ const NewMenu = ({open , setOpen } : Props) => {
             });
             const { assetUrl } = await response.json();
             newMenuPayload.assetUrl = assetUrl;
-            console.log("in " , assetUrl)
             dispatch(createNewMenu({...newMenuPayload  , onSuccess }))
         } else {
             dispatch(createNewMenu({...newMenuPayload  , onSuccess }))
@@ -52,7 +50,6 @@ const NewMenu = ({open , setOpen } : Props) => {
     };
 
     const onFileSelected = async(acceptedFiles : File[]) => {
-        console.log(acceptedFiles[0])
         setMenuImage(acceptedFiles[0]);
     }
 

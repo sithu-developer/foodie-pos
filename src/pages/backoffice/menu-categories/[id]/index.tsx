@@ -15,17 +15,21 @@ const MenuCategoryDetail = () => {
     const menuCategories = useAppSelector(state => state.menuCategory.items);
     const menuCategory = menuCategories.find(item => item.id === id);
 
+    const disabledLocationMenuCategories = useAppSelector(state => state.disabledLocationMenuCategory.items);
+
     const [updatedMenuCategory ,setUpdatedMenuCategory ] = useState<UpdateMenuCategoryOptions>();
     const [open , setOpen ] = useState<boolean>(false)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if(menuCategory)  // here
-        setUpdatedMenuCategory({ id , name : menuCategory.name , locationId : Number(localStorage.getItem("selectedLocationId")) , isAvailable : true})
-    } , [menuCategory])
+        if(menuCategory && disabledLocationMenuCategories) { 
+            const disabledLocationMenuCategory = disabledLocationMenuCategories.find(item => item.menuCategoryId === id && item.locationId === Number(localStorage.getItem("selectedLocationId")) )
+            setUpdatedMenuCategory({ id , name : menuCategory.name ,  isAvailable : disabledLocationMenuCategory ? false : true , locationId : Number(localStorage.getItem("selectedLocationId")) })
+        }
+    } , [menuCategory , disabledLocationMenuCategories])
 
     if(!menuCategory || !updatedMenuCategory) return null;
-
+    
     const handleUpdateMenuCategory = () => { 
         const isValid = updatedMenuCategory.name && updatedMenuCategory.locationId && updatedMenuCategory.id;
         if(!isValid) dispatch(setOpenSnackbar({ message : "Error , please complete above first ! " , severity : "error"}))
@@ -50,7 +54,7 @@ const MenuCategoryDetail = () => {
                 <Button variant="outlined" color="error" onClick={() => setOpen(true)} >Delete</Button>
             </Box>
             <TextField defaultValue={menuCategory.name} onChange={(event) => setUpdatedMenuCategory({...updatedMenuCategory , name : event.target.value })} />
-            <FormControlLabel control={<Switch defaultChecked onChange={( _ , value) => setUpdatedMenuCategory({...updatedMenuCategory , isAvailable : value })} />} label="Available" />
+            <FormControlLabel control={<Switch defaultChecked={updatedMenuCategory.isAvailable}  />} label="Available" onChange={( _ , value) => setUpdatedMenuCategory({...updatedMenuCategory , isAvailable : value })} />
             <Box sx={{ display : "flex" , gap : "20px"}}>
                 <Button variant="contained" onClick={() => router.push("/backoffice/menu-categories")} >Cancel</Button>
                 <Button variant="contained" onClick={handleUpdateMenuCategory} >Update</Button>
