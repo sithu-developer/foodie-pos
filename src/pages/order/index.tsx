@@ -2,9 +2,12 @@ import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Tabs, Tab } from "@mui/material";
 import { MenuCategory } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const OrderPage = () => {
+    const router = useRouter();
+    const {companyId , tableId} = router.query;
     const menuCategories = useAppSelector(state => state.menuCategory.items)
     const [value , setValue ] = useState(0);
     const menuCategoryMenus = useAppSelector(state => state.menuCategoryMenu.items)
@@ -18,7 +21,11 @@ const OrderPage = () => {
     const renderMenus = () => {
       const menuIds = menuCategoryMenus.filter(item => item.menuCategoryId === selectedMenuCategory?.id).map(item => item.menuId)
       const selectedMenus = menus.filter(menu => menuIds.includes(menu.id))
-      return selectedMenus.map(menu => <MenuCard menu={menu} href={`/order/${menu.id}`} />)
+      return selectedMenus.map(menu => <MenuCard key={menu.id} menu={menu} href={`/order/menus/${menu.id}?companyId=${companyId}&tableId=${tableId}`} />)
+    /* return selectedMenus.map(menu => {
+        const href = { pathname : `/order/menus/${menu.id}` }
+       return  <MenuCard key={menu.id} menu={menu} href={href} />
+      } ) */
     }
 
     return (
