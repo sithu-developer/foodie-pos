@@ -24,8 +24,8 @@ export const uploadFile = multer({
     })
 }).array("files" , 1 );
 
-export const getQrCodeUrl = (companyId : number , tableId : number) => {
-    return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/foodie-pos/si-thu-naing/qrcode/companyId-${companyId}-tableId-${tableId}.png`;
+export const getQrCodeUrl = (companyId : number , tableId : number) => {  // here without .png is ok in my project why?
+    return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/foodie-pos/si-thu-naing/qrcode/companyId-${companyId}-tableId-${tableId}`;
 }
 
 export const generateLinkForQRCode = (companyId : number , tableId : number) => {
@@ -34,7 +34,7 @@ export const generateLinkForQRCode = (companyId : number , tableId : number) => 
 
 export const qrCodeImageUpload = async (companyId : number , tableId : number) => {
     try {
-        const qrImageData = await QRCode.toDataURL(generateLinkForQRCode(companyId , tableId));
+        const qrImageData = await QRCode.toDataURL(generateLinkForQRCode(companyId , tableId) , {scale : 20});
         const input = {
             Bucket : "msquarefdc",
             Key  : `foodie-pos/si-thu-naing/qrcode/companyId-${companyId}-tableId-${tableId}`,

@@ -4,6 +4,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addMenuCategoryMenu, removeMenuCategoryMenuFromMenu, replaceMenuCategoryMenu } from "./menuCategoryMenuSlice";
 import { Menu, MenuCategoryMenu } from "@prisma/client";
 import { removeMenuAddonCategoriesFromMenu } from "./menuAddonCategorySlice";
+import { addDisabledLocationMenu, removeDisabledLocationMenu } from "./disabledLocationMenuSlice";
 
 const initialState : MenuSliceInitialState = {
     items : [],
@@ -43,18 +44,23 @@ export const createNewMenu = createAsyncThunk("menuSlice/createNewMenu" , async(
 })
 
 export const updateMenu = createAsyncThunk("menuSlice/updateMenu" , async(option : UpdateMenuOption , thunkApi) => {
-    const { id ,name, price, selectedMenuCategoryIds, onError , onSuccess} = option;
+    const { id ,name, price, isAvailable , locationId ,selectedMenuCategoryIds, onError , onSuccess} = option;
     try {   
         const response = await fetch(`${config.apiBaseUrl}/menus` , {
             method : "PUT", 
             headers : {
                 "content-type" : "application/json"
             },
-            body : JSON.stringify({id , name , price , selectedMenuCategoryIds})
+            body : JSON.stringify({id , name , isAvailable , price , locationId , selectedMenuCategoryIds})
         });
-        const {updatedMenu, updatedMenuCategoryMenus} = await response.json();
+        const {updatedMenu, updatedMenuCategoryMenus , disabledLocationMenu} = await response.json();
         thunkApi.dispatch(replaceMenu(updatedMenu));
         thunkApi.dispatch(replaceMenuCategoryMenu(updatedMenuCategoryMenus));
+        if(disabledLocationMenu && isAvailable === false ) {
+            thunkApi.dispatch(addDisabledLocationMenu(disabledLocationMenu))
+        } else if( disabledLocationMenu && isAvailable === true) {
+            thunkApi.dispatch(removeDisabledLocationMenu(disabledLocationMenu))
+        }  
         onSuccess && onSuccess();
     } catch (err) {
         onError && onError();

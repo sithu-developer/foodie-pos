@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteMenu, updateMenu } from "@/store/slices/menuSlice";
 import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
 import { UpdateMenuOption } from "@/types/menu";
-import { Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, Switch, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -14,6 +14,8 @@ const UpdateMenu = () => {
 
     const menuCategories = useAppSelector(state => state.menuCategory.items)
     const menus = useAppSelector(state => state.menu.items);
+    const disabledLocationMenus = useAppSelector(state => state.disabledLocationMenu.items);
+    
 
     const menu = menus.find(item => item.id === menuId );
     const allMenuCategoryMenus = useAppSelector(state => state.menuCategoryMenu.items);
@@ -22,12 +24,13 @@ const UpdateMenu = () => {
     
     const [updatedMenu , setUpdatedMenu] = useState<UpdateMenuOption>();
     const dispatch = useAppDispatch();
-
+    
     useEffect(() => {
-        if(menu) {
-            setUpdatedMenu({...menu,selectedMenuCategoryIds }) 
+        if(menu && disabledLocationMenus) {
+            const existDisable = disabledLocationMenus.find(item => item.menuId === menuId && item.locationId === Number(localStorage.getItem("selectedLocationId")));
+            setUpdatedMenu({...menu,selectedMenuCategoryIds , isAvailable : existDisable ? false : true , locationId : Number(localStorage.getItem("selectedLocationId"))  }) 
         }
-    }, [menu])
+    }, [menu , disabledLocationMenus])
 
     if(!menu || !updatedMenu) return null; 
 
@@ -42,6 +45,7 @@ const UpdateMenu = () => {
         dispatch(updateMenu({
             ...updatedMenu,
             id : menuId,
+            locationId : Number(localStorage.getItem("selectedLocationId")),
             onSuccess : () => {
                 router.push("/backoffice/menus");
                 dispatch(setOpenSnackbar({ message : "menu is updated successfully "}))
@@ -88,6 +92,9 @@ const UpdateMenu = () => {
                     </MenuItem> )}
                 </Select>
             </FormControl>
+            <Box>
+                <FormControlLabel control={<Switch defaultChecked={updatedMenu.isAvailable} />} label="Available" onChange={( _ , value) => setUpdatedMenu({...updatedMenu , isAvailable : value}) } />
+            </Box>
             <Box sx={{ display : "flex" , gap : "20px"}}>
                 <Button variant="contained" onClick={() => router.push("/backoffice/menus")}>Cancel</Button>
                 <Button variant="contained" onClick={handleUpdateMenu} >Update</Button>

@@ -10,6 +10,7 @@ import { setTable } from "./tableSlice";
 import { setMenuCategoryMenu } from "./menuCategoryMenuSlice";
 import { setMenuAddonCategories } from "./menuAddonCategorySlice";
 import { setDisabledLocationMenuCategory } from "./disabledLocationMenuCategorySlice";
+import { setDisabledLocationMenu } from "./disabledLocationMenuSlice";
 
 const initialState : AppSlice = {
     init : false,
@@ -17,10 +18,12 @@ const initialState : AppSlice = {
     error : null
 }
 
-export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( _ , thunkApi) => {
-    // const {onSuccess, onError, locationId} = options;
+export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( options : GetAppDataOption , thunkApi) => {
+    const { companyId , tableId } = options;
     try {
-        const response = await fetch(`${config.apiBaseUrl}/app`);
+        const appDataUrl = companyId && tableId ? `${config.apiBaseUrl}/app?companyId=${companyId}&tableId=${tableId}`
+        : `${config.apiBaseUrl}/app`;
+        const response = await fetch(appDataUrl);
         const appData = await response.json();
         const {          
             menuCategories,
@@ -31,7 +34,8 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( _ 
             menuAddonCategories,
             locations,
             tables ,
-            disabledLocationMenuCategories} = appData;
+            disabledLocationMenuCategories,
+            disabledLocationMenus} = appData;
         thunkApi.dispatch(setInit(true));
         thunkApi.dispatch(setMenuCategories(menuCategories));
         thunkApi.dispatch(setMenus(menus));
@@ -41,7 +45,8 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( _ 
         thunkApi.dispatch(setMenuAddonCategories(menuAddonCategories));
         thunkApi.dispatch(setLocation(locations));
         thunkApi.dispatch(setTable(tables));
-        thunkApi.dispatch(setDisabledLocationMenuCategory(disabledLocationMenuCategories))
+        thunkApi.dispatch(setDisabledLocationMenuCategory(disabledLocationMenuCategories));
+        thunkApi.dispatch(setDisabledLocationMenu(disabledLocationMenus));
         // onSuccess && onSuccess();
     } catch (err) {
         // onError && onError();

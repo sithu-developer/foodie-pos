@@ -10,5 +10,6 @@ export interface BaseOptions {
 }
 
 export interface GetAppDataOption extends BaseOptions {
-    locationId : string
+    companyId ?:  number;
+    tableId ?: number;
 }

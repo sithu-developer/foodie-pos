@@ -7,7 +7,16 @@ import TableBarIcon from '@mui/icons-material/TableBar';
 
 const TablesPage = () => {
     const [open , setOpen ] = useState<boolean>(false);
-    const tables = useAppSelector(store => store.table.items)
+    const tables = useAppSelector(store => store.table.items);
+
+    const handlePrintQRCode = (assetUrl : string) => {
+        const imageWindow =  window.open("");
+        imageWindow?.document.write(
+            `<!DOCTYPE html><html lang="en"><head><title>Print image</title></head><body style="text-align: center;"><img src="${assetUrl}" onload="window.print(); window.close()" /></body></html>`
+        )
+        imageWindow?.document.close() // ask why this close is for ?
+    }
+
     return (
         <Box>
             <Box sx={{display : "flex", justifyContent : "flex-end"}}>
@@ -17,7 +26,11 @@ const TablesPage = () => {
             </Box>
             <NewTable open={open} setOpen={setOpen} />
             <Box sx={{ display : "flex" , flexWrap : "wrap " , gap :"20px", mt : "20px"}}>
-                {tables.map(element => <ItemCard key={element.id} icon={<TableBarIcon/>} title={element.name} href={`/backoffice/tables/${element.id}`} />)}
+                {tables.map(element => <Box sx={{display : "flex" , flexDirection : "column" , gap : "10px"}}>
+                    <ItemCard key={element.id} icon={<TableBarIcon/>} title={element.name} href={`/backoffice/tables/${element.id}`} /> 
+                    <Button variant="contained" onClick={() => handlePrintQRCode(element.assetUrl)}>Print OR Code</Button>
+                </Box>
+                )}
             </Box>
         </Box>
         )

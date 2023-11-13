@@ -23,7 +23,7 @@ export default async function handler(
         );
         res.status(200).json({newMenu, menuCategoryMenus});
     } else if (method === "PUT") {
-      const {id , name , price , selectedMenuCategoryIds } = req.body as UpdateMenuOption;
+      const {id , name , price , isAvailable , locationId , selectedMenuCategoryIds } = req.body as UpdateMenuOption;
       const isValid = id && name && price && selectedMenuCategoryIds.length > 0 ;
       if(!isValid) return res.status(400).send("Bad request");
       const menu = await prisma.menu.findUnique({where : { id }});
@@ -33,7 +33,19 @@ export default async function handler(
       const updatedMenuCategoryMenus = await prisma.$transaction(
         selectedMenuCategoryIds.map(menuCategoryId => prisma.menuCategoryMenu.create({data : {menuCategoryId , menuId : id}}))
       );
-      return res.status(200).json({updatedMenu, updatedMenuCategoryMenus});
+      if(isAvailable === false) {
+        const existDisable = await prisma.disabledLocationMenu.findFirst({ where : { locationId , menuId : id }});
+        if(existDisable ) return res.status(200).json({updatedMenu, updatedMenuCategoryMenus})
+        const disabledLocationMenu = await prisma.disabledLocationMenu.create({ data : { locationId , menuId : id}})
+        return res.status(200).json({updatedMenu, updatedMenuCategoryMenus , disabledLocationMenu});
+      } else if(isAvailable === true) {
+        const existDisable = await prisma.disabledLocationMenu.findFirst({ where : { locationId , menuId : id }});
+        if(existDisable ) {
+          const disabledLocationMenu = await prisma.disabledLocationMenu.delete({ where : { id : existDisable.id }});
+          return res.status(200).json({updatedMenu, updatedMenuCategoryMenus , disabledLocationMenu});
+        }
+        return res.status(200).json({updatedMenu, updatedMenuCategoryMenus});
+      }
     } else if (method === "DELETE") {
       const menuId = Number(req.query.id);
       const exist = await prisma.menu.findFirst({where : {id : menuId}});
