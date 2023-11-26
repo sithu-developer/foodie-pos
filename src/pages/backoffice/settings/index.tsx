@@ -1,42 +1,40 @@
-import { useAppSelector } from "@/store/hooks";
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { updateCompany } from "@/store/slices/companySlice";
+import { setSelectedLocation } from "@/store/slices/locationSlice";
+import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
+import { UpdateCompanyOptions } from "@/types/company";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const SettingsPage = () => {
-    const locations = useAppSelector(store => store.location.items);
-    const [locationId , setLocationId ] = useState< number | string >("");
+    const dispatch = useAppDispatch();
+    const company = useAppSelector(state => state.company.item);
+    const [updatedCompany , setUpdatedCompany ] = useState<UpdateCompanyOptions>()
 
     useEffect(() => {
-      const selectedLocationId = localStorage.getItem("selectedLocationId");
-      if (selectedLocationId) {
-        setLocationId(selectedLocationId);
-      } else {
-        const firstLocation = locations[0];
-        if(firstLocation) setLocationId(firstLocation.id);
+      if(company) {
+        setUpdatedCompany({id : company.id , name : company.name , street : company.street , township : company.township , city : company.city})
       }
-    } , []);
+    } , [company]);
 
-    const handleLocationChange = (evt : SelectChangeEvent<number>) => {
-      localStorage.setItem("selectedLocationId", String(evt.target.value));
-      setLocationId(evt.target.value);
-    };
+    if(!company || !updatedCompany) return null;
 
-    if(!locations.length) return null;
+    const handleUpdateCompany = () => {
+      dispatch(updateCompany({...updatedCompany , onSuccess : () => {
+        dispatch(setOpenSnackbar({message : "Company is successfully updated ."}))
+      }} ))
+    }
 
     return (
-      <Box>
-      <FormControl fullWidth>
-        <InputLabel>Location</InputLabel>
-        <Select
-          value={Number(locationId)}
-          label="location"
-          onChange={handleLocationChange}
-        >
-        {locations.map(item => 
-          <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
-          )}
-        </Select>
-      </FormControl>
+      <Box sx={{display : "flex" , flexDirection : "column" , gap : "20px"}}>
+        <Typography variant="h5" color="primary.main" >Setting</Typography>
+        <TextField defaultValue={company.name} onChange={(event) => setUpdatedCompany({...updatedCompany , name : event.target.value })} label="Name" />
+        <TextField defaultValue={company.street} onChange={(event) => setUpdatedCompany({...updatedCompany , street : event.target.value })} label="Street" />
+        <TextField defaultValue={company.township} onChange={(event) => setUpdatedCompany({...updatedCompany , township : event.target.value })} label="Township" />
+        <TextField defaultValue={company.city} onChange={(event) => setUpdatedCompany({...updatedCompany , city : event.target.value })} label="City" />
+        <Box>
+          <Button variant="contained" disabled={!updatedCompany.name || !updatedCompany.street || !updatedCompany.township || !updatedCompany.city} onClick={() => handleUpdateCompany()} >Update</Button>
+        </Box>
       </Box>
     )
 }

@@ -4,16 +4,17 @@ import { Box, Button, Chip, Dialog, DialogContent, DialogTitle, TextField } from
 import { useState } from "react"
 import { config } from "@/utils/config"
 import { setOpenSnackbar } from "@/store/slices/snackbarSlice"
+import { CreateNewLocationOption } from "@/types/location"
 
 interface Props {
     open : boolean
     setOpen : (value : boolean) => void
 }
 
-const defaultLocation = {name : "", address : ""}
+const defaultLocation = {name : "", street : "" , township : "" , city : "" }
 
 const NewLocation = ({open , setOpen } : Props) => {
-    const [newLocation , setNewLocation] = useState(defaultLocation);
+    const [newLocation , setNewLocation] = useState<CreateNewLocationOption>(defaultLocation);
     const dispatch = useAppDispatch();
 
     const onSuccess = () => {
@@ -36,15 +37,21 @@ const NewLocation = ({open , setOpen } : Props) => {
                 <TextField placeholder="Name" onChange={(event) => {
                     setNewLocation({...newLocation , name : event.target.value })
                 }} />
-                <TextField placeholder="Address" onChange={(event) => {
-                    setNewLocation({...newLocation , address : event.target.value })
+                <TextField placeholder="Street" onChange={(event) => {
+                    setNewLocation({...newLocation , street : event.target.value })
+                }} />
+                <TextField placeholder="Township" onChange={(event) => {
+                    setNewLocation({...newLocation , township : event.target.value })
+                }} />
+                <TextField placeholder="City" onChange={(event) => {
+                    setNewLocation({...newLocation , city : event.target.value })
                 }} />
                 <Box sx={{display :"flex", justifyContent : "flex-end", gap : "20px"}}>
                     <Button variant="contained" onClick={() => {
                         setOpen(false);
                         setNewLocation(defaultLocation);
                     } } >Cancel</Button>
-                    <Button variant="contained" disabled={newLocation.name && newLocation.address ? false : true} onClick={handleCreateLocation} 
+                    <Button variant="contained" disabled={newLocation.name && newLocation.street && newLocation.township && newLocation.city ? false : true} onClick={handleCreateLocation} 
                     >Comfirm</Button>
                 </Box>
             </DialogContent>

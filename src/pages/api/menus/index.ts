@@ -23,12 +23,12 @@ export default async function handler(
         );
         res.status(200).json({newMenu, menuCategoryMenus});
     } else if (method === "PUT") {
-      const {id , name , price , isAvailable , locationId , selectedMenuCategoryIds } = req.body as UpdateMenuOption;
-      const isValid = id && name && price && selectedMenuCategoryIds.length > 0 ;
+      const {id , name , price , isAvailable , assetUrl , locationId , selectedMenuCategoryIds } = req.body as UpdateMenuOption;
+      const isValid = id && name && price !== undefined && selectedMenuCategoryIds.length > 0;
       if(!isValid) return res.status(400).send("Bad request");
       const menu = await prisma.menu.findUnique({where : { id }});
       if(!menu)  return res.status(400).send("Bad request");
-      const updatedMenu = await prisma.menu.update({data : {name , price} , where : { id }});
+      const updatedMenu = await prisma.menu.update({data : {name , price , assetUrl} , where : { id }});
       await prisma.menuCategoryMenu.deleteMany({where : {menuId : id}});
       const updatedMenuCategoryMenus = await prisma.$transaction(
         selectedMenuCategoryIds.map(menuCategoryId => prisma.menuCategoryMenu.create({data : {menuCategoryId , menuId : id}}))

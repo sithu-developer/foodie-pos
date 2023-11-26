@@ -1,23 +1,23 @@
 import { Box, Chip, Typography } from "@mui/material";
-import { AddonCategory } from "@prisma/client";
+import { Addon, AddonCategory } from "@prisma/client";
 import Addons from "./Addons";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
     addonCategory : AddonCategory;
-    selectedAddonIds : number[];
-    setSelectedAddonIds : Dispatch<SetStateAction<number[]>>
+    selectedAddons : Addon[];
+    setSelectedAddons : Dispatch<SetStateAction<Addon[]>>
 }
 
-const DisplayAddonCategories = ({addonCategory , selectedAddonIds , setSelectedAddonIds } : Props) => {
+const DisplayAddonCategories = ({addonCategory , selectedAddons , setSelectedAddons } : Props) => {
     const {id, isRequired , name} = addonCategory;
     return (
         <Box>
-            <Box sx={{display : "flex" , justifyContent : "space-between", width : "300px"}}>
+            <Box sx={{display : "flex" , justifyContent : "space-between", alignItems : "center" ,  width : "300px"}}>
                 <Typography>{name}</Typography>
                 <Chip label={isRequired ? "Required" : "Optional"} sx={{bgcolor : "success.main"}} />
             </Box>
-            <Addons isRequired={isRequired} addonCategoryId={id}  selectedAddonIds={selectedAddonIds} setSelectedAddonIds={setSelectedAddonIds} />
+            <Addons isRequired={isRequired} addonCategoryId={id}  selectedAddons={selectedAddons} setSelectedAddons={setSelectedAddons} />
         </Box>
     )
 }

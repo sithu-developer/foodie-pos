@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteMenu, updateMenu } from "@/store/slices/menuSlice";
 import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
 import { UpdateMenuOption } from "@/types/menu";
-import { Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, Switch, TextField, Typography } from "@mui/material";
+import { config } from "@/utils/config";
+import { Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent, Switch, TextField, Typography } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const UpdateMenu = () => {
     const [open , setOpen ] = useState<boolean>(false)
@@ -22,6 +24,7 @@ const UpdateMenu = () => {
     const menuCategoryMenus = allMenuCategoryMenus.filter(item => item.menuId === menuId);
     const selectedMenuCategoryIds = menuCategoryMenus.map(item => item.menuCategoryId);
     
+    const [loading , setLoading ] = useState(false)
     const [updatedMenu , setUpdatedMenu] = useState<UpdateMenuOption>();
     const dispatch = useAppDispatch();
     
@@ -62,12 +65,36 @@ const UpdateMenu = () => {
             }
         }));
     }
+
+    const handleMenuImageUpload = async(event : ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if(files) {
+            const file = files[0];
+            if(file) setLoading(true)
+            const formData = new FormData();
+            formData.append("files" , file);
+            const response = await fetch(`${config.apiBaseUrl}/assets` , {
+                method : "POST",
+                body : formData
+            })
+            const { assetUrl } = await response.json();
+            dispatch(updateMenu({...updatedMenu , assetUrl , onSuccess : () => setLoading(false) }))
+        }
+    }
    
     return (
         <Box sx={{display : "flex", flexDirection : "column", gap : "20px"}}>
             <Box sx={{display : "flex", justifyContent : "space-between"}} >
             <Typography variant="h5">{menu.name}</Typography>
                 <Button variant="outlined" color="error" onClick={() => setOpen(true)}>Delete</Button>
+            </Box>
+            <Box sx={{ display : "flex" , flexDirection : "column" , alignItems : "center" , gap : "10px"}}>
+                <Image alt="menu-image" src={menu.assetUrl || "/default-menu.png"} width={200} height={0} style={{ height : "auto"}} />
+                <Button variant="contained" component="label" >
+                    Upload File
+                    <input type="file" hidden onChange={handleMenuImageUpload}/>
+                    {loading && <CircularProgress sx={{ml : "10px" , fontSize : "20px"}} color="inherit"/>}
+                </Button>
             </Box>
             <TextField defaultValue={menu.name} onChange={(event) => setUpdatedMenu({...updatedMenu , id : menuId , name : event.target.value })} />
             <TextField defaultValue={menu.price} onChange={(event) => setUpdatedMenu({...updatedMenu ,id : menuId, price : Number(event.target.value) })} />

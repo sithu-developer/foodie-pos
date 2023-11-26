@@ -1,7 +1,6 @@
 import { AppSlice, GetAppDataOption } from "@/types/app";
-import { CartSlice } from "@/types/cart";
-import { config } from "@/utils/config";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { CartItem, CartSlice } from "@/types/cart";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState : CartSlice = {
     items : [],
@@ -9,28 +8,25 @@ const initialState : CartSlice = {
     error : null
 }
 
-export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( options : GetAppDataOption , thunkApi) => {
-    const { companyId , tableId } = options;
-    try {
-        const appDataUrl = companyId && tableId ? `${config.apiBaseUrl}/app?companyId=${companyId}&tableId=${tableId}`
-        : `${config.apiBaseUrl}/app`;
-        const response = await fetch(appDataUrl);
-        const appData = await response.json();
-        const {} = appData;
-    } catch (err) {
-        // onError && onError();
-    }
-})
 
 const appSlice = createSlice({
     name : "appSlice",
     initialState,
     reducers : {
-        setCartItems : (state , action) => {
-            state.items = action.payload;
+        addCartItem : (state , action : PayloadAction<CartItem>) => {
+            state.items = [...state.items , action.payload ];
+        },
+        removeCartItem : (state ,action : PayloadAction<CartItem> ) => {
+            state.items = state.items.filter(item => item.id !== action.payload.id)
+        },
+        replaceCartItem : (state , action : PayloadAction<CartItem>) => {
+            state.items = state.items.map(item => item.id === action.payload.id ? action.payload : item)
+        },
+        emptyCart : (state) => {
+            state.items = []
         }
     }
 })
 
-export const {setCartItems} = appSlice.actions;
+export const {addCartItem , removeCartItem , replaceCartItem , emptyCart } = appSlice.actions;
 export default appSlice.reducer;

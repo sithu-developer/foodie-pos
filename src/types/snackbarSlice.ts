@@ -1,8 +1,8 @@
 type SnackbarSeverity = "success" | "error";
 
 export interface SnackbarSlice {
-    open : boolean;
+    open ?: boolean;
     message : string | null;
-    autoHideDuration : number;
-    severity : SnackbarSeverity;
+    autoHideDuration ?: number;
+    severity ?: SnackbarSeverity;
 }

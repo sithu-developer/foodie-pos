@@ -16,7 +16,7 @@ const Layout = ({children} : Props) => {
     
     useEffect(() => {
         if(session && !init) {
-            dispatch(fetchGetAppData({}))
+            dispatch(fetchGetAppData({}));
         }
     } , [session])
 

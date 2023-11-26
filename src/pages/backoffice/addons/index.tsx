@@ -1,7 +1,7 @@
 import NewAddon from "@/components/NewAddon";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
@@ -10,7 +10,8 @@ const AddonsPage = () => {
     const addons = useAppSelector(store => store.addon.items)
     return (
         <Box>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}}>
+            <Box sx={{display : "flex", justifyContent : "space-between"}}>
+                <Typography variant="h5" color="primary.main" >Addon</Typography>
                 <Button variant="contained" onClick={() => {
                     setOpen(true)
                 }} >New Addon</Button>    

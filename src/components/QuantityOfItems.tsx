@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { Dispatch, SetStateAction } from "react";
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface Props {
     quantity : number;
@@ -17,9 +17,9 @@ const QuantityOfItems = ({quantity , setQuantity } : Props) => {
 
     return (
         <Box sx={{ display : "flex" , gap : "10px"}}>
-            <RemoveCircleOutlineIcon onClick={handleReduce} sx={{cursor : "pointer"}} />
+            <RemoveCircleIcon onClick={handleReduce} sx={{cursor : "pointer"}} />
             <Typography >{quantity}</Typography>
-            <ControlPointIcon onClick={() => setQuantity(quantity + 1)} sx={{cursor : "pointer"}} />
+            <AddCircleIcon onClick={() => setQuantity(quantity + 1)} sx={{cursor : "pointer"}} />
         </Box>
     )
 }

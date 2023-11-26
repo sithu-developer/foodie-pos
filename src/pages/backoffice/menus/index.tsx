@@ -1,7 +1,6 @@
 import NewMenu from "@/components/NewMenu";
-import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import MenuCard from "@/components/MenuCard";
 
@@ -12,7 +11,8 @@ const MenusPage = () => {
     
     return (
         <Box>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}}>
+            <Box sx={{display : "flex", justifyContent : "space-between"}}>
+                <Typography variant="h5" color="primary.main" >Menus</Typography>
                 <Button variant="contained" onClick={() => {
                     setOpen(true)
                 }} >New Menu</Button>    

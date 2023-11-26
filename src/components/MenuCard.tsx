@@ -21,7 +21,7 @@ const MenuCard = ({ menu   , isAvailable , href} : Props) => {
             sx={{objectFit : "contain"}}
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant="h6" component="div">
               {name}
             </Typography>
             <Typography variant="body2">

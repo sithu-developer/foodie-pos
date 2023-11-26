@@ -1,13 +1,14 @@
 import NewTable from "@/components/NewTable";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import TableBarIcon from '@mui/icons-material/TableBar';
 
 const TablesPage = () => {
     const [open , setOpen ] = useState<boolean>(false);
     const tables = useAppSelector(store => store.table.items);
+    const currentLocationTables = tables.filter(item => item.locationId === Number(localStorage.getItem("selectedLocationId")))
 
     const handlePrintQRCode = (assetUrl : string) => {
         const imageWindow =  window.open("");
@@ -19,14 +20,15 @@ const TablesPage = () => {
 
     return (
         <Box>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}}>
+            <Box sx={{display : "flex", justifyContent : "space-between"}}>
+                <Typography variant="h5" color="primary.main" >Tables</Typography>
                 <Button variant="contained" onClick={() => {
                     setOpen(true)
                 }} >New Table</Button>
             </Box>
             <NewTable open={open} setOpen={setOpen} />
             <Box sx={{ display : "flex" , flexWrap : "wrap " , gap :"20px", mt : "20px"}}>
-                {tables.map(element => <Box sx={{display : "flex" , flexDirection : "column" , gap : "10px"}}>
+                {currentLocationTables.map(element => <Box key={element.id} sx={{display : "flex" , flexDirection : "column" , gap : "10px"}}>
                     <ItemCard key={element.id} icon={<TableBarIcon/>} title={element.name} href={`/backoffice/tables/${element.id}`} /> 
                     <Button variant="contained" onClick={() => handlePrintQRCode(element.assetUrl)}>Print OR Code</Button>
                 </Box>

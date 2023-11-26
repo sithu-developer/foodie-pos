@@ -51,7 +51,7 @@ const NewMenu = ({open , setOpen } : Props) => {
 
     const onFileSelected = async(acceptedFiles : File[]) => {
         setMenuImage(acceptedFiles[0]);
-    }
+    };
 
     return (
         <Dialog open={open} onClose={() => {

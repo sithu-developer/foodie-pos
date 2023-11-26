@@ -1,5 +1,5 @@
 import { SnackbarSlice } from "@/types/snackbarSlice";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState : SnackbarSlice = {
     message : null,
@@ -12,7 +12,7 @@ const snackbarSlice = createSlice({
     name : "snackbarSlice",
     initialState ,
     reducers : {
-        setOpenSnackbar : (state , action) => {
+        setOpenSnackbar : (state , action : PayloadAction<SnackbarSlice>) => {
             const {message  , autoHideDuration = 5000 , severity = "success"} = action.payload;
             state.open = true;
             state.autoHideDuration = autoHideDuration;

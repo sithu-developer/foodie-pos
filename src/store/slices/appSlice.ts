@@ -1,7 +1,7 @@
 import { AppSlice, GetAppDataOption } from "@/types/app";
 import { config } from "@/utils/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { setLocation } from "./locationSlice";
+import { setLocation, setSelectedLocation } from "./locationSlice";
 import { setMenus } from "./menuSlice";
 import { setAddonCategory } from "./addonCategorySlice";
 import { setMenuCategories } from "./menuCategorySlice";
@@ -11,6 +11,8 @@ import { setMenuCategoryMenu } from "./menuCategoryMenuSlice";
 import { setMenuAddonCategories } from "./menuAddonCategorySlice";
 import { setDisabledLocationMenuCategory } from "./disabledLocationMenuCategorySlice";
 import { setDisabledLocationMenu } from "./disabledLocationMenuSlice";
+import { setOrders } from "./orderSlice";
+import { setCompany } from "./companySlice";
 
 const initialState : AppSlice = {
     init : false,
@@ -19,13 +21,14 @@ const initialState : AppSlice = {
 }
 
 export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( options : GetAppDataOption , thunkApi) => {
-    const { companyId , tableId } = options;
+    const { tableId } = options;
     try {
-        const appDataUrl = companyId && tableId ? `${config.apiBaseUrl}/app?companyId=${companyId}&tableId=${tableId}`
+        const appDataUrl = tableId ? `${config.apiBaseUrl}/app?tableId=${tableId}`
         : `${config.apiBaseUrl}/app`;
         const response = await fetch(appDataUrl);
         const appData = await response.json();
-        const {          
+        const {
+            company,       
             menuCategories,
             menus,
             menuCategoryMenus,
@@ -35,8 +38,10 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( op
             locations,
             tables ,
             disabledLocationMenuCategories,
-            disabledLocationMenus} = appData;
+            disabledLocationMenus,
+            orders} = appData;
         thunkApi.dispatch(setInit(true));
+        thunkApi.dispatch(setCompany(company))
         thunkApi.dispatch(setMenuCategories(menuCategories));
         thunkApi.dispatch(setMenus(menus));
         thunkApi.dispatch(setMenuCategoryMenu(menuCategoryMenus));
@@ -47,6 +52,7 @@ export const fetchGetAppData = createAsyncThunk("appSlice/getAppData", async( op
         thunkApi.dispatch(setTable(tables));
         thunkApi.dispatch(setDisabledLocationMenuCategory(disabledLocationMenuCategories));
         thunkApi.dispatch(setDisabledLocationMenu(disabledLocationMenus));
+        thunkApi.dispatch(setOrders(orders))
         // onSuccess && onSuccess();
     } catch (err) {
         // onError && onError();

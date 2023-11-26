@@ -13,7 +13,7 @@ export default function Home() {
 
    useEffect(() => {
     if(session && !init) {
-      dispatch(fetchGetAppData());
+      dispatch(fetchGetAppData({}));
     }
   },[session]);
   

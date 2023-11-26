@@ -10,7 +10,8 @@ const AddonCategoriesPage = () => {
     const addonCategories = useAppSelector(store => store.addonCategory.items)
     return (
         <Box>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}}>
+            <Box sx={{display : "flex", justifyContent : "space-between"}}>
+                <Typography variant="h5" color="primary.main" >Addon Categories</Typography>
                 <Button variant="contained" onClick={() => {
                     setOpen(true)
                 }} >New Addon Category</Button>    

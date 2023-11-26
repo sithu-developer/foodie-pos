@@ -2,7 +2,8 @@ import {Location} from "@prisma/client"
 import { BaseOptions } from "./app";
 
 export interface LocationSliceInitialState {
-    items : Location[]
+    items : Location[];
+    selectedLocation : Location | null;
     isLoading : boolean
     error : Error | null
 }
@@ -10,5 +11,7 @@ export interface LocationSliceInitialState {
 
 export interface CreateNewLocationOption extends BaseOptions {
     name : string;
-    address : string;
+    street : string;
+    township : string;
+    city : string;
 }

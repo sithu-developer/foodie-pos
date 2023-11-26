@@ -43,7 +43,7 @@ const MenuCategoryDetail = () => {
         dispatch(deleteMenuCategory({ id , onSuccess : () => {
             router.push("/backoffice/menu-categories");
             dispatch(setOpenSnackbar({ message : "Menu category is deleted successfully "}));
-            dispatch(fetchGetAppData());
+            dispatch(fetchGetAppData({}));
         }}));
     }
 

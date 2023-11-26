@@ -1,7 +1,7 @@
 import NewMenuCategory from "@/components/NewMenuCategory";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import CategoryIcon from '@mui/icons-material/Category';
 
@@ -9,10 +9,11 @@ const MenuCategoriesPage = () => {
     const [open, setOpen] = useState<boolean>(false)
     const menuCategories = useAppSelector(state => state.menuCategory.items);
     const disabledLocationMenuCategories = useAppSelector(state => state.disabledLocationMenuCategory.items);
-
+ 
     return (
         <Box>
-            <Box sx={{display : "flex", justifyContent : "flex-end"}}>
+            <Box sx={{display : "flex", justifyContent : "space-between"}}>
+                <Typography variant="h5" color="primary.main" >Menu Categories</Typography>
                 <Button variant="contained" onClick={() => {
                     setOpen(true)
                 }} >New Menu Category</Button>    

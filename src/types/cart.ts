@@ -1,10 +1,11 @@
-import { Menu } from "@prisma/client";
+import { Addon, Menu } from "@prisma/client";
 
 export interface CartItem {
     id : string;
     menu : Menu;
-    addons : number[];
-    quantity : number ;
+    addons : Addon[];
+    quantity : number;
+    totalPrice : number;
 }
 
 export interface CartSlice {
