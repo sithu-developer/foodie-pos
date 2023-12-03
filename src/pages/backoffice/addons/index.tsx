@@ -16,7 +16,7 @@ const AddonsPage = () => {
                     setOpen(true)
                 }} >New Addon</Button>    
             </Box>
-            <Box sx={{ display : "flex" , flexWrap : "wrap" , gap : "20px" , mt : "20px"}}>
+            <Box sx={{ display : "flex" , flexWrap : "wrap" , gap : "20px" , mt : "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
                 {addons.map(element => <ItemCard key={element.id} icon={<WaterDropIcon/>} title={element.name} href={`/backoffice/addons/${element.id}`} />)}
             </Box>
             <NewAddon open={open} setOpen={setOpen} />      

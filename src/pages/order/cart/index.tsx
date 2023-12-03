@@ -31,7 +31,7 @@ const CartPage = () => {
     }
 
     return (
-        <Box sx={{ display : "flex" , justifyContent : "center" , alignItems : "center"  , pb : "40px" }}>
+        <Box sx={{ display : "flex" , justifyContent : "center" , alignItems : "center"  , pb : "40px" , mx : { xs : "10px" , sm : 0} }}>
             {!cartItems.length ? <Typography variant="h5" sx={{ mt : "40px"}}>Your cart is empty .</Typography> 
             : <Box sx={{ width : "600px" , minHeight : "280px" , bgcolor : "success.main" , mt : "40px" , p : "30px" , borderRadius : "20px" , display : "flex" , flexDirection : "column " , gap : "20px"}}>
                 <Typography variant="h5" sx={{ fontWeight : "bold" , margin : "0 auto"}}>Review of Your Order</Typography>

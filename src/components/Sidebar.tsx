@@ -1,4 +1,4 @@
-import { Box, Divider, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { Items } from "@/types/sidebar";
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
@@ -9,12 +9,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Link from "next/link";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { signOut } from "next-auth/react";
 
 
 const Sidebar = () => {
 
     return (
-        <Box sx={{width : "200px",borderTopRightRadius : "10px", bgcolor : "secondary.main",height : "100vh" , display : "flex", flexDirection : "column"}}>
+        <Box sx={{width : "200px", borderTopRightRadius : "10px", bgcolor : "secondary.main", minHeight : "100vh" , display : "flex", flexDirection : "column"}}>
             {items.slice(0,7).map(item => {
                 return (
                   <Link href={item.href} style={{textDecoration : "none", color : "white"}} key={item.id}>
@@ -40,6 +42,14 @@ const Sidebar = () => {
                   </Link>
                 )
             })}
+            <Box sx={{ display : { sm : "none"}, mt : "5px" }}>
+                <ListItemButton onClick={() => signOut({callbackUrl : "/backoffice"})} >
+                    <ListItemIcon  sx={{color : "white"}}>
+                      <LogoutIcon/>
+                    </ListItemIcon>
+                    <ListItemText sx={{color : "white"}} primary={"Sign out"}/>
+                </ListItemButton>
+            </Box>
         </Box>
     )
 }

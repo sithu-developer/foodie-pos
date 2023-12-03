@@ -18,35 +18,60 @@ const OrderAppHeader = () => {
 
     return (
         <Box>
-            <Box sx={{ height : "100px"}}>
-                {!cartPageOrActiveOrderPage ? (
-                    <Box sx={{ position : "absolute" , right : "20px" , top : "30px" }}>
-                        <AddShoppingCartIcon sx={{  cursor : "pointer" ,  color : "secondary.main" , fontSize : "40px"}} 
-                            onClick={() => {
-                                const  {tableId} = router.query;
-                                router.push({pathname : "/order/cart" , query : {tableId}})
-                            }} 
-                        />
-                        <Typography sx={{position : "absolute" , top : -5 , right : -5}}>{cartItems.length}</Typography>
-                    </Box>)
-                    : (<Box sx={{ position : "absolute" , right : "20px" , top : "30px" }} >
-                        <HomeIcon sx={{fontSize : "40px" , cursor : "pointer"}} onClick={() => {
-                            const {tableId } = router.query;
-                            router.push({pathname : "/order" , query : {tableId }})
-                        }} />
-                    </Box>)
-                }
-                <Image alt="header-image" src="/order-app-header.svg" width={0} height={0} style={{width : "100%" , height : "auto"}} />
-            </Box>
-            {isHome && (
-                <Box sx={{mt : "20px", display : "flex", flexDirection : "column" ,  alignItems : "center"}}>
-                    <Typography variant="h3">{company.name}</Typography>
-                    <Typography>{company.street}</Typography>
-                    <Typography>{company.township}</Typography>
-                    <Typography>{company.city}</Typography>
+            <Box sx={{ display : { sm : "none"}}}>
+                <Box sx={{ display : "flex" , alignItems : "center" , bgcolor : "info.main" , height : "50px" , px : "10px"}}>
+                    <Typography variant="h6">{company.name}</Typography>
+                    {!cartPageOrActiveOrderPage ? (
+                            <Box sx={{ position : "absolute" , right : "10px" , top : "10px" }}>
+                                <AddShoppingCartIcon sx={{  cursor : "pointer" ,  color : "secondary.main" , fontSize : "30px"}} 
+                                    onClick={() => {
+                                        const  {tableId} = router.query;
+                                        router.push({pathname : "/order/cart" , query : {tableId}})
+                                    }} 
+                                />
+                                <Typography sx={{position : "absolute" , top : -5 , right : -5 , fontSize : "15px"}}>{cartItems.length}</Typography>
+                            </Box>)
+                            : (<Box sx={{ position : "absolute" , right : "10px" , top : "10px" }} >
+                                <HomeIcon sx={{fontSize : "30px" , cursor : "pointer"}} onClick={() => {
+                                    const {tableId } = router.query;
+                                    router.push({pathname : "/order" , query : {tableId }})
+                                }} />
+                            </Box>)
+                        }
                 </Box>
-            )}
+            </Box>
+            <Box sx={{ display : { xs : "none" , sm : "block"}}}>
+                <Box sx={{ height : "100px"}}>
+                    {!cartPageOrActiveOrderPage ? (
+                        <Box sx={{ position : "absolute" , right : "20px" , top : "30px" }}>
+                            <AddShoppingCartIcon sx={{  cursor : "pointer" ,  color : "secondary.main" , fontSize : "40px"}} 
+                                onClick={() => {
+                                    const  {tableId} = router.query;
+                                    router.push({pathname : "/order/cart" , query : {tableId}})
+                                }} 
+                            />
+                            <Typography sx={{position : "absolute" , top : -5 , right : -5}}>{cartItems.length}</Typography>
+                        </Box>)
+                        : (<Box sx={{ position : "absolute" , right : "20px" , top : "30px" }} >
+                            <HomeIcon sx={{fontSize : "40px" , cursor : "pointer"}} onClick={() => {
+                                const {tableId } = router.query;
+                                router.push({pathname : "/order" , query : {tableId }})
+                            }} />
+                        </Box>)
+                    }
+                    <Image alt="header-image" src="/order-app-header.svg" width={0} height={0} style={{width : "100%" , height : "auto"}} />
+                </Box>
+                {isHome && (
+                    <Box sx={{mt : "20px", display : "flex", flexDirection : "column" ,  alignItems : "center"}}>
+                        <Typography variant="h3">{company.name}</Typography>
+                        <Typography>{company.street}</Typography>
+                        <Typography>{company.township}</Typography>
+                        <Typography>{company.city}</Typography>
+                    </Box>
+                )}
+            </Box>
         </Box>
+
     )
 }
 

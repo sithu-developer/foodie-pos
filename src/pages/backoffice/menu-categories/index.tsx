@@ -18,7 +18,7 @@ const MenuCategoriesPage = () => {
                     setOpen(true)
                 }} >New Menu Category</Button>    
             </Box>
-            <Box sx={{ display : "flex" , flexWrap : "wrap" , gap : "20px" , mt : "20px"}}>
+            <Box sx={{ display : "flex" , flexWrap : "wrap" , gap : "20px" , mt : "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
                 {menuCategories.map(element =>  {
                     const disabledLocationMenuCategory = disabledLocationMenuCategories.find(item => item.locationId === Number(localStorage.getItem("selectedLocationId")) && item.menuCategoryId === element.id)
                     return (

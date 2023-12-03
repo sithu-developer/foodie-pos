@@ -50,5 +50,3 @@ export const formatOrders = (orders : Order[] , addons: Addon[] , tables : Table
     })
     return orderItems;
 }
-
-// to change company name and location names

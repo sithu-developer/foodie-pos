@@ -27,7 +27,7 @@ const TablesPage = () => {
                 }} >New Table</Button>
             </Box>
             <NewTable open={open} setOpen={setOpen} />
-            <Box sx={{ display : "flex" , flexWrap : "wrap " , gap :"20px", mt : "20px"}}>
+            <Box sx={{ display : "flex" , flexWrap : "wrap " , gap :"20px", mt : "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
                 {currentLocationTables.map(element => <Box key={element.id} sx={{display : "flex" , flexDirection : "column" , gap : "10px"}}>
                     <ItemCard key={element.id} icon={<TableBarIcon/>} title={element.name} href={`/backoffice/tables/${element.id}`} /> 
                     <Button variant="contained" onClick={() => handlePrintQRCode(element.assetUrl)}>Print OR Code</Button>

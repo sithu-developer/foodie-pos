@@ -17,7 +17,7 @@ const MenusPage = () => {
                     setOpen(true)
                 }} >New Menu</Button>    
             </Box>
-            <Box sx={{display :"flex", flexWrap : "wrap" , mt : "20px" , gap : "20px"}}>
+            <Box sx={{display :"flex", flexWrap : "wrap" , mt : "20px" , gap : "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
                 {menus.map(menu => {
                     const existDisable = disableLocationMenus.find(item => item.menuId === menu.id && item.locationId === Number(localStorage.getItem("selectedLocationId")))
                     return <MenuCard key={menu.id} isAvailable={existDisable ? false : true}  href={`/backoffice/menus/${menu.id}`} menu={menu}  /> 

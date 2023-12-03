@@ -35,7 +35,7 @@ const OrderPage = () => {
             {menuCategories.map(item => <Tab key={item.id} label={item.name} onClick={() => setSelectedMenuCategory(item)} />)}
           </Tabs>
         </Box>
-        <Box sx={{ display : "flex" , gap : "20px" , flexWrap : "wrap" , mt : "20px" , p : "20px"}}>{renderMenus()}</Box>
+        <Box sx={{ display : "flex" , gap : "20px" , flexWrap : "wrap" , justifyContent : {xs : "center" , sm : "flex-start"} , mt : "20px" , p : "20px"}}>{renderMenus()}</Box>
       </Box>
     )
 }

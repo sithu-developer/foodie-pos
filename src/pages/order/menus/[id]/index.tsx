@@ -65,9 +65,9 @@ const menuDetailPage = () => {
     }
 
     return (
-        <Box sx={{ display : "flex" ,gap : "20px", flexDirection : "column", justifyContent : "center ", alignItems : "center", mt : "80px" , pb : "40px" }}>
-            <Typography variant="h4">{menu.name}</Typography>
-            <Image alt="menu-image" src={menu.assetUrl || "/default-menu.png"} width={200} height={110} style={{position : "absolute" , top : "40px"}} />
+        <Box sx={{ display : "flex" ,gap : "20px", flexDirection : "column", justifyContent : "center ", alignItems : "center", mt : "80px" , pb : "60px" }}>
+            <Typography variant="h5" sx={{ mt : {xs :"40px" , sm : "0px"}}} >{menu.name}</Typography>
+            <Image alt="menu-image" src={menu.assetUrl || "/default-menu.png"} width={200} height={110} style={{position : "absolute" , top : "55px"}} />
             {addonCategories.map(addonCategory => <DisplayAddonCategories addonCategory={addonCategory} key={addonCategory.id} selectedAddons={selectedAddons} setSelectedAddons={setSelectedAddons} />)}
             <QuantityOfItems quantity={quantity} setQuantity={setQuantity} />
             <Typography sx={{ fontWeight : "bold" , fontSize : "20px"}}>Total Price : {totalPrice}</Typography>

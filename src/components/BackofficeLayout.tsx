@@ -24,7 +24,11 @@ const Layout = ({children} : Props) => {
         <Box>
             <Topbar />
             <Box sx={{display : "flex"}}>
-                {session && <Sidebar />}
+                {session && (
+                    <Box sx={{ display : { xs : "none" , sm : "block" }}} >
+                        <Sidebar />
+                    </Box>
+                )}
                 <Box sx={{width : "100%", height : "100%", padding : "20px"}}>{children}</Box>
             </Box>
         </Box>

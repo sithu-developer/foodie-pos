@@ -17,7 +17,7 @@ const AddonCategoriesPage = () => {
                 }} >New Addon Category</Button>    
             </Box>
             <NewAddonCategory open={open} setOpen={setOpen} />      
-            <Box sx={{display : "flex" , flexWrap : "wrap" , gap : "20px" , mt: "20px"}}>
+            <Box sx={{display : "flex" , flexWrap : "wrap" , gap : "20px" , mt: "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
                 {addonCategories.map(element => <ItemCard key={element.id} title={element.name} icon={<ClassIcon />} href={`/backoffice/addon-categories/${element.id}`} />)}
             </Box>
         </Box>
