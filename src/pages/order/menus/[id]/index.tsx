@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const menuDetailPage = () => {
+const MenuDetailPage = () => {
     const [quantity , setQuantity ] = useState<number>(1);
     const [selectedAddons , setSelectedAddons ] = useState<Addon[]>([])
     const dispatch = useAppDispatch();
@@ -78,4 +78,4 @@ const menuDetailPage = () => {
     )
 }
 
-export default menuDetailPage;
+export default MenuDetailPage;

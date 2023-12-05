@@ -26,7 +26,7 @@ const features = [
 const Features = () => {
     return (
         <Box sx={{ display : "flex" , gap : "100px" , justifyContent : "center" , flexWrap : "wrap" , width : "80vw" , margin : "0 auto" , mt : "30px"}} >
-            {features.map(item => <Zoom in style={{ transitionDelay : item.delay}}>
+            {features.map(item => <Zoom key={item.lable} in style={{ transitionDelay : item.delay}}>
                 <Box sx={{ width : "260px" , textAlign : "center" }}>
                     {item.icon}
                     <Typography>{item.lable}</Typography>

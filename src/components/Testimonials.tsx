@@ -10,7 +10,7 @@ const comments = [
 const Testimonials = () => {
     return (
         <Box sx={{ display : "flex" , justifyContent : "center" , gap : "80px" , mt : "40px"}}>
-            {comments.map(item => <Box sx={{bgcolor : "info.main" , width : "350px" , height : "200px" , borderRadius : "10px"}}>
+            {comments.map(item => <Box key={item.name} sx={{bgcolor : "info.main" , width : "350px" , height : "200px" , borderRadius : "10px"}}>
                 <Box sx={{ display : "flex" , gap : "20px" , alignItems : "center"}}>
                     <Image alt={item.name} src={item.imgSrc} width={55} height={50}  style={{margin : "5px" , borderRadius : "50px"}} />
                     <Box sx={{ fontStyle : "italic"}}>
