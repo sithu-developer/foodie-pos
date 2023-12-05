@@ -1,5 +1,5 @@
 import NewAddon from "@/components/NewAddon";
-import ItemCard from "@/components/ItemCard";
+import ItemPaper from "@/components/ItemPage";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
@@ -17,7 +17,7 @@ const AddonsPage = () => {
                 }} >New Addon</Button>    
             </Box>
             <Box sx={{ display : "flex" , flexWrap : "wrap" , gap : "20px" , mt : "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
-                {addons.map(element => <ItemCard key={element.id} icon={<WaterDropIcon/>} title={element.name} href={`/backoffice/addons/${element.id}`} />)}
+                {addons.map(element => <ItemPaper key={element.id} icon={<WaterDropIcon/>} title={element.name} href={`/backoffice/addons/${element.id}`} />)}
             </Box>
             <NewAddon open={open} setOpen={setOpen} />      
         </Box>   

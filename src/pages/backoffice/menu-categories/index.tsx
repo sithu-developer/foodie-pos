@@ -1,9 +1,9 @@
 import NewMenuCategory from "@/components/NewMenuCategory";
-import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import CategoryIcon from '@mui/icons-material/Category';
+import ItemPaper from "@/components/ItemPage";
 
 const MenuCategoriesPage = () => {
     const [open, setOpen] = useState<boolean>(false)
@@ -22,7 +22,7 @@ const MenuCategoriesPage = () => {
                 {menuCategories.map(element =>  {
                     const disabledLocationMenuCategory = disabledLocationMenuCategories.find(item => item.locationId === Number(localStorage.getItem("selectedLocationId")) && item.menuCategoryId === element.id)
                     return (
-                        <ItemCard key={element.id} isAvailable={disabledLocationMenuCategory ? false : true } icon={<CategoryIcon/>} title={element.name} href={`/backoffice/menu-categories/${element.id}`} />
+                        <ItemPaper key={element.id} isAvailable={disabledLocationMenuCategory ? false : true } icon={<CategoryIcon/>} title={element.name} href={`/backoffice/menu-categories/${element.id}`} />
                         )
                     }
                 )}

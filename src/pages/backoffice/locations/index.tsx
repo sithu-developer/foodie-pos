@@ -1,5 +1,5 @@
 import NewLocation from "@/components/NewLocation";
-import ItemCard from "@/components/ItemCard";
+import ItemPaper from "@/components/ItemPage";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
@@ -22,7 +22,7 @@ const LocationsPage = () => {
                 }} >New Location</Button>    
             </Box>
             <Box sx={{display : "flex", flexWrap : "wrap", gap : "20px", mt : "10px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
-                {locations.map(element => <ItemCard key={element.id} selected={selectedLocation.id === element.id} icon={<LocationOnIcon />} title={element.name} onClick={() => {
+                {locations.map(element => <ItemPaper key={element.id} selected={selectedLocation.id === element.id} icon={<LocationOnIcon />} title={element.name} onClick={() => {
                     dispatch(setSelectedLocation(element));
                     localStorage.setItem("selectedLocationId" , String(element.id));
                 }} /> )}

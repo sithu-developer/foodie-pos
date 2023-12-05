@@ -3,7 +3,7 @@ import { useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import ClassIcon from '@mui/icons-material/Class';
-import ItemCard from "@/components/ItemCard";
+import ItemPaper from "@/components/ItemPage";
 
 const AddonCategoriesPage = () => {
     const [open , setOpen]  = useState<boolean>(false);
@@ -18,7 +18,7 @@ const AddonCategoriesPage = () => {
             </Box>
             <NewAddonCategory open={open} setOpen={setOpen} />      
             <Box sx={{display : "flex" , flexWrap : "wrap" , gap : "20px" , mt: "20px" , justifyContent : { xs : "center" , sm : "flex-start"} }}>
-                {addonCategories.map(element => <ItemCard key={element.id} title={element.name} icon={<ClassIcon />} href={`/backoffice/addon-categories/${element.id}`} />)}
+                {addonCategories.map(element => <ItemPaper key={element.id} title={element.name} icon={<ClassIcon />} href={`/backoffice/addon-categories/${element.id}`} />)}
             </Box>
         </Box>
     )
