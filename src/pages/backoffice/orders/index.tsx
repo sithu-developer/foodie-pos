@@ -43,7 +43,6 @@ const OrdersPage = () => {
         dispatch(refreshOrderBackoffice({ locationId }))
     }
     
-    if(!orderItems.length) return null;
 
     return (
         <Box>
