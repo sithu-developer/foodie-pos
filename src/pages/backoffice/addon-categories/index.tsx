@@ -1,9 +1,9 @@
 import NewAddonCategory from "@/components/NewAddonCategory";
-import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import ClassIcon from '@mui/icons-material/Class';
+import ItemCard from "@/components/ItemCard";
 
 const AddonCategoriesPage = () => {
     const [open , setOpen]  = useState<boolean>(false);
