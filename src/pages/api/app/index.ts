@@ -19,7 +19,7 @@ export default async function handler(
           // const locations = await prisma.location.findMany({where : { companyId : Number(companyId) , isArchived : false }});
           // const locationIds = locations.map(element => element.id);
           const table = await prisma.table.findFirst({where : { id : Number(tableId) , isArchived : false}});
-          if(!table)return res.status(400).send("bad request");
+          if(!table)return res.status(400).send("bad request, no table");
           const locationId = table.locationId;
           const location = await prisma.location.findFirst({ where : { id : locationId}}) as Location;
           const companyId = location.companyId;
