@@ -19,7 +19,7 @@ const Topbar = () => {
             </Box>
             <Box sx={{ display : "flex" , flexDirection : "column" , justifyContent : "center" , alignItems : "center"}}>
                 <Typography variant="h4" color={"success.main"}>Foodie POS</Typography>
-                <Typography color={"success.main"}>({selectedLocation?.name})</Typography>
+                {selectedLocation && <Typography color={"success.main"}>{selectedLocation.name}</Typography>}
             </Box>
            {data ? (<Box>
                 <Button sx={{ display : { xs : "none" , sm : "block"}}} variant="contained" onClick={() => signOut({callbackUrl : "/backoffice"})}>Sign out</Button>
